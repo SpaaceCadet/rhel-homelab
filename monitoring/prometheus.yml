@@ -1,0 +1,20 @@
+# Sanitized example from the 19 October 2026 scrape configuration.
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: node
+    static_configs:
+      - targets: ["host.docker.internal:9100"]
+
+  - job_name: cadvisor
+    static_configs:
+      - targets: ["cadvisor:8080"]
+
+  - job_name: nginx
+    static_configs:
+      - targets: ["nginx-exporter:9113"]
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
