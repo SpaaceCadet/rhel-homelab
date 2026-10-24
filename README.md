@@ -15,6 +15,7 @@ This repository documents reproducible deployment patterns and real troubleshoot
 | [Nextcloud + MariaDB + Collabora](nextcloud/README.md) | Docker persistence, database restore, TLS/mTLS reverse proxy and documented Collabora integration |
 | [Pi-hole + LAN DNS](dns/README.md) | External Docker macvlan, local DNS, client resolution, troubleshooting and recovery |
 | [Linux MCP + Obsidian MCP](mcp/README.md) | Restricted SSH-based Linux diagnostics, secure tunnels and writable Obsidian vault integration |
+| [Prometheus + Grafana monitoring](monitoring/README.md) | Node Exporter, cAdvisor, Nginx Exporter, PromQL, persistence and recovery |
 
 ### Incident highlight: browser video played without audio
 
@@ -31,7 +32,7 @@ See the [Stremio incident report](stremio/troubleshooting.md) and [deployment ex
 
 ## Planned topics
 
-Monitoring (Prometheus/Grafana), system architecture and disaster recovery.
+System architecture and disaster recovery.
 
 ## Security
 
