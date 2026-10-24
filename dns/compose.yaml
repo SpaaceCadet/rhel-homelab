@@ -1,0 +1,23 @@
+# Educational example based on an observed Pi-hole macvlan installation.
+# Requires an EXTERNAL Docker network named pihole_macvlan (see macvlan.md).
+# Replace example addresses and secrets. Review supported Pi-hole versions.
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest # observed source tag; pin tested version
+    hostname: pihole
+    restart: unless-stopped
+    networks:
+      pihole_macvlan:
+        ipv4_address: ${PIHOLE_LAN_IP:?Set in .env}
+    environment:
+      TZ: ${TZ:-Etc/UTC}
+      FTLCONF_webserver_api_password: ${PIHOLE_WEB_PASSWORD:?Set in .env}
+      FTLCONF_dns_listeningMode: "all"
+    volumes:
+      - ./data/etc-pihole:/etc/pihole:Z
+      - ./data/etc-dnsmasq.d:/etc/dnsmasq.d:Z
+
+networks:
+  pihole_macvlan:
+    external: true
