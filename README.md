@@ -11,6 +11,7 @@ This repository documents reproducible deployment patterns and real troubleshoot
 | [Stremio Docker](stremio/README.md) | Container networking, HLSv2/FFprobe troubleshooting and E-AC3 browser playback |
 | [RHEL security baseline](security/README.md) | Firewalld, Docker/nftables, SSH/Fail2ban and enforcing SELinux |
 | [Nginx, Certbot & mTLS](nginx/README.md) | Reverse proxy, HTTPS issuance/renewal, optional mutual TLS, safe backup and rollback |
+| [Wake-on-LAN + SSH RDP](remote-access/README.md) | Remote wake, secure localhost RDP tunnel through Linux, and troubleshooting |
 
 ### Incident highlight: browser video played without audio
 
@@ -27,7 +28,7 @@ See the [Stremio incident report](stremio/troubleshooting.md) and [deployment ex
 
 ## Planned topics
 
-Nextcloud, monitoring (Prometheus/Grafana), DNS services, SSH/Wake-on-LAN, and system architecture.
+Nextcloud, monitoring (Prometheus/Grafana), DNS services and system architecture.
 
 ## Security
 
