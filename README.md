@@ -12,6 +12,7 @@ This repository documents reproducible deployment patterns and real troubleshoot
 | [RHEL security baseline](security/README.md) | Firewalld, Docker/nftables, SSH/Fail2ban and enforcing SELinux |
 | [Nginx, Certbot & mTLS](nginx/README.md) | Reverse proxy, HTTPS issuance/renewal, optional mutual TLS, safe backup and rollback |
 | [Wake-on-LAN + SSH RDP](remote-access/README.md) | Remote wake, secure localhost RDP tunnel through Linux, and troubleshooting |
+| [Nextcloud + MariaDB + Collabora](nextcloud/README.md) | Docker persistence, database restore, TLS/mTLS reverse proxy and documented Collabora integration |
 
 ### Incident highlight: browser video played without audio
 
@@ -28,7 +29,7 @@ See the [Stremio incident report](stremio/troubleshooting.md) and [deployment ex
 
 ## Planned topics
 
-Nextcloud, monitoring (Prometheus/Grafana), DNS services and system architecture.
+Monitoring (Prometheus/Grafana), DNS services and system architecture.
 
 ## Security
 
