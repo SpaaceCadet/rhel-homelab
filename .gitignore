@@ -1,0 +1,21 @@
+# Secrets, local configuration, and application state
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+**/data/
+**/secrets/
+**/*.key
+**/*.p12
+**/*.pfx
+**/privkey.pem
+**/fullchain.pem
+**/cert.pem
+**/*.sql
+**/*.sql.gz
+**/*.tar
+**/*.tar.gz
+**/*.age
+.DS_Store
