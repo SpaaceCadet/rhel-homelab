@@ -23,6 +23,14 @@ The stream had audio in VLC but not in Stremio Web. HLSv2 probing returned HTTP 
 
 See the [Stremio incident report](stremio/troubleshooting.md) and [deployment example](stremio/compose.yaml).
 
+## Infrastructure engineering
+
+- [Architecture and trust boundaries](architecture/README.md) — logical Mermaid diagrams spanning LAN, proxy, containers, data and MCP
+- [Disaster recovery and migration](disaster-recovery/README.md) — staged rebuild, consistent backups, acceptance and rollback
+- [Security assessment](security/assessment.md) — evidence-based risk inventory and hardening priorities
+- [Incident case studies](incidents/README.md) — documented investigations, supporting evidence and remaining unknowns
+- [Continuous validation](ci/README.md) — Compose/YAML/link validation and secret scanning on GitHub Actions
+
 ## Documentation philosophy
 
 - Distinguish **historically observed** settings from safe **example configurations**.
@@ -32,7 +40,7 @@ See the [Stremio incident report](stremio/troubleshooting.md) and [deployment ex
 
 ## Planned topics
 
-System architecture and disaster recovery.
+Automated restore drills, monitoring alerting, and expanded incident coverage.
 
 ## Security
 
