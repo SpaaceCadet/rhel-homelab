@@ -13,6 +13,7 @@ This repository documents reproducible deployment patterns and real troubleshoot
 | [Nginx, Certbot & mTLS](nginx/README.md) | Reverse proxy, HTTPS issuance/renewal, optional mutual TLS, safe backup and rollback |
 | [Wake-on-LAN + SSH RDP](remote-access/README.md) | Remote wake, secure localhost RDP tunnel through Linux, and troubleshooting |
 | [Nextcloud + MariaDB + Collabora](nextcloud/README.md) | Docker persistence, database restore, TLS/mTLS reverse proxy and documented Collabora integration |
+| [Pi-hole + LAN DNS](dns/README.md) | External Docker macvlan, local DNS, client resolution, troubleshooting and recovery |
 
 ### Incident highlight: browser video played without audio
 
@@ -29,7 +30,7 @@ See the [Stremio incident report](stremio/troubleshooting.md) and [deployment ex
 
 ## Planned topics
 
-Monitoring (Prometheus/Grafana), DNS services and system architecture.
+Monitoring (Prometheus/Grafana) and system architecture.
 
 ## Security
 
