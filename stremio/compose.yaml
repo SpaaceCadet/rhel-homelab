@@ -1,0 +1,23 @@
+# Example deployment. Replace the hostname, host IP and paths for your environment.
+services:
+  stremio:
+    image: tsaridas/stremio-docker:latest
+    container_name: stremio
+    restart: unless-stopped
+    environment:
+      NO_CORS: "1"
+      AUTO_SERVER_URL: "1"
+      CASTING_DISABLED: "1"
+    ports:
+      - "127.0.0.1:8083:8080"
+    volumes:
+      - ./data:/root/.stremio-server:Z
+    extra_hosts:
+      # Must point to the reachable HTTPS reverse-proxy host,
+      # not to the container's own 127.0.0.1.
+      - "stremio.home.test:192.168.1.10"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
