@@ -14,6 +14,7 @@ This repository documents reproducible deployment patterns and real troubleshoot
 | [Wake-on-LAN + SSH RDP](remote-access/README.md) | Remote wake, secure localhost RDP tunnel through Linux, and troubleshooting |
 | [Nextcloud + MariaDB + Collabora](nextcloud/README.md) | Docker persistence, database restore, TLS/mTLS reverse proxy and documented Collabora integration |
 | [Pi-hole + LAN DNS](dns/README.md) | External Docker macvlan, local DNS, client resolution, troubleshooting and recovery |
+| [Linux MCP + Obsidian MCP](mcp/README.md) | Restricted SSH-based Linux diagnostics, secure tunnels and writable Obsidian vault integration |
 
 ### Incident highlight: browser video played without audio
 
@@ -30,7 +31,7 @@ See the [Stremio incident report](stremio/troubleshooting.md) and [deployment ex
 
 ## Planned topics
 
-Monitoring (Prometheus/Grafana) and system architecture.
+Monitoring (Prometheus/Grafana), system architecture and disaster recovery.
 
 ## Security
 
