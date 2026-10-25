@@ -50,6 +50,23 @@ Do not publish `docker inspect` dumps, NetworkManager profiles, active source al
 
 **Do not run** `docker compose down -v`, `docker volume prune`, raw nftables restores or disk formatting as part of an exploratory recovery attempt.
 
+## Stremio recovery dependency (2026-10-25)
+
+After the [Stremio Docker bridge playback outage](../incidents/stremio-docker-bridge-playback-2026-10-25.md), the documented service configuration uses a **named external bridge** (stremio-diag), a local public CA/trust certificate, and a static mapping from its advertised HTTPS hostname to the host reverse proxy. **Docker Compose will not create an external network** during recovery.
+
+Preflight a new host using the sanitized example in [stremio/compose.yaml](../stremio/compose.yaml):
+
+~~~bash
+docker network inspect stremio-diag >/dev/null 2>&1 ||
+  docker network create --driver bridge stremio-diag
+# Place the PUBLIC local CA certificate on host at the configured source path.
+# Replace the EXAMPLE hostname/host LAN IP with your actual local values.
+docker compose config -q
+docker compose up -d --no-deps stremio
+~~~
+
+Verify network membership, default route, app data bind mount, host-loopback-only web port, name resolution, HTTPS trust, and **actual video playback with sound**. Do not assume the new bridge will receive the same subnet after rebuild, and do not copy live certificate private keys into Git. Preserve client-side Guest session state separately. A working UI or stats endpoint is insufficient for streaming acceptance.
+
 ## Target validation
 
 ```bash
