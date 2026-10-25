@@ -66,3 +66,10 @@ Use only content you are permitted to access. Keep certificates valid and truste
 ## Prevent recurrence
 
 Keep DNS and the static IP mapping current, preserve Docker volumes and Guest browser storage, and monitor transcoding CPU/RAM. An FFprobe exit code alone hides the important stderr DNS detail; capturing it first can avoid unnecessary proxy and codec changes.
+
+
+## Follow-up incident — 2026-10-25
+
+The later failure was **different** from the DNS/E-AC3 case documented above. The frontend returned HTTP 200, but bundled Nginx timed out talking to the torrent streaming backend. Torrent stats for the selected stream showed 0 downloaded bytes/peers and missing metadata. The new Docker bridge successfully downloaded a control torrent, while bounded tests on the older Stremio bridge stalled. Migrating Stremio's default route to the replacement bridge restored playback. A separate Node.js trust-store issue for the local HTTPS certificate was also tested. **Exact underlying bridge defect remains unknown.**
+
+See the [2026-10-25 Docker bridge postmortem](../incidents/stremio-docker-bridge-playback-2026-10-25.md) and the updated [sanitized Compose](compose.yaml). These two incidents should remain distinct in incident history.
