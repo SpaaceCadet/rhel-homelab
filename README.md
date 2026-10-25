@@ -21,7 +21,7 @@ This repository documents reproducible deployment patterns and real troubleshoot
 
 The stream had audio in VLC but not in Stremio Web. HLSv2 probing returned HTTP 500 because Docker could not resolve the advertised local HTTPS hostname. A mapping to the host HTTPS reverse proxy restored probing and the user observed working browser playback.
 
-See the [Stremio incident report](stremio/troubleshooting.md) and [deployment example](stremio/compose.yaml).
+See the [2026-10-24 DNS/audio incident](stremio/troubleshooting.md), [2026-10-25 Docker bridge playback postmortem](incidents/stremio-docker-bridge-playback-2026-10-25.md), and [updated sanitized Compose](stremio/compose.yaml).
 
 ## Infrastructure engineering
 
