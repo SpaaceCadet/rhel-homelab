@@ -4,6 +4,45 @@ A documented homelab deployment of [tsaridas/stremio-docker](https://github.com/
 
 > **Privacy:** Hostnames, LAN IP addresses, and data paths below are examples. No real certificates, keys, tokens, or browser Guest data are included.
 
+## 2026-10-25 playback outage: Docker bridge migration
+
+A later incident produced **HLSv2 504 Gateway Timeout**, backend media probe exits, and "Video is not supported", even though the frontend and /stats.json returned HTTP 200. Torrent statistics had zero bytes/peers and missing metadata. Tests found that the original Stremio bridge repeatedly stalled while the host, Docker default bridge, and a freshly created user-defined bridge downloaded an official control torrent. Moving Stremio's default route to the replacement bridge restored browser playback. The precise root cause in the original bridge was **not established**.
+
+Read the [full postmortem](../incidents/stremio-docker-bridge-playback-2026-10-25.md). This is separate from the earlier 2026-10-24 DNS/E-AC3 incident.
+
+### Current sanitized Compose and prerequisites
+
+The checked-in [compose.yaml](compose.yaml) documents the restored topology: a **single named external network**, a read-only local public CA certificate mount + NODE_EXTRA_CA_CERTS, an extra_hosts mapping to the reachable host HTTPS proxy, the persistent data bind mount, and the localhost-only 8083 port mapping.
+
+Before deployment, prepare the network and public certificate:
+
+~~~bash
+docker network inspect stremio-diag >/dev/null 2>&1 ||
+  docker network create --driver bridge stremio-diag
+mkdir -p data certs
+# Put only a valid PUBLIC local trust certificate at ./certs/local-ca.crt.
+# Update stremio.home.test and 192.168.1.10 to your own values in compose.yaml.
+test -f certs/local-ca.crt
+docker compose config -q
+docker compose up -d stremio
+~~~
+
+Never commit the certificate's **private key**, secrets, stream info hashes, or persistent media/cache data. Do not put a hostname mapping to container 127.0.0.1. Using a self-signed server certificate with CA:TRUE as a trust anchor was a tested Node.js workaround; a properly managed local CA with valid SAN/usage is preferable. NODE_EXTRA_CA_CERTS does not necessarily configure FFmpeg's trust independently.
+
+The network is declared external, so **Compose will not create it** on a new host. Keep it across redeployments and include network creation in disaster-recovery steps.
+
+### Quick health check after recreation
+
+~~~bash
+docker inspect stremio --format '{{json .NetworkSettings.Networks}}'
+PID=$(docker inspect -f '{{.State.Pid}}' stremio)
+sudo nsenter -t "$PID" -n ip route
+curl -I http://127.0.0.1:8083/
+docker exec stremio getent hosts stremio.home.test
+~~~
+
+Inspect real torrent download progress and successful video/audio playback, not just the UI. A read-only HTTP 200 is not a media health check. Preserve the bind mount and browser Guest state; do not use docker compose down -v. Also review NO_CORS: it is inherited from the working environment and relaxes origin restrictions.
+
 ## Architecture
 
 ```text
