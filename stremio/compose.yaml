@@ -1,23 +1,47 @@
-# Example deployment. Replace the hostname, host IP and paths for your environment.
+# Sanitized example based on the tested 2026-10-25 recovery.
+# Replace sample hostname, reverse-proxy IP and certificate with YOUR values.
+# Prerequisites:
+#   docker network create --driver bridge stremio-diag
+#   mkdir -p data certs
+#   install ONLY your local public CA/trust certificate at ./certs/local-ca.crt
+# Never commit cert private keys, user data, or a real internal address map.
+
 services:
   stremio:
     image: tsaridas/stremio-docker:latest
     container_name: stremio
     restart: unless-stopped
+
+    # The previous bridge exhibited repeatable torrent stalls; this named
+    # replacement network restored playback during the documented incident.
+    networks:
+      - stremio-diag
+
     environment:
-      NO_CORS: "1"
+      NO_CORS: "1" # Existing setting; review before exposing more broadly.
       AUTO_SERVER_URL: "1"
       CASTING_DISABLED: "1"
+      NODE_EXTRA_CA_CERTS: /etc/ssl/local/stremio-ca.crt
+
     ports:
       - "127.0.0.1:8083:8080"
+
     volumes:
       - ./data:/root/.stremio-server:Z
+      - ./certs/local-ca.crt:/etc/ssl/local/stremio-ca.crt:ro
+
     extra_hosts:
-      # Must point to the reachable HTTPS reverse-proxy host,
-      # not to the container's own 127.0.0.1.
+      # This must resolve to the host's reachable HTTPS reverse proxy,
+      # not 127.0.0.1 inside the container.
       - "stremio.home.test:192.168.1.10"
+
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
+
+networks:
+  stremio-diag:
+    external: true
+    name: stremio-diag
