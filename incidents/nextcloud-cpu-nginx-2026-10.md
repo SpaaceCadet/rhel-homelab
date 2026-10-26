@@ -34,3 +34,7 @@ Separately, Nginx logged repeated automated requests for common configuration an
 ## Redaction
 
 Real host identifiers, addresses, usernames, certificate paths and attacker infrastructure have been omitted. The raw source logs remain private.
+
+## Mitigation added on 26 October 2026
+
+An [hourly CPU watchdog](../nextcloud/cpu-watchdog.md) was deployed after the operator reported rare recurring saturation and requested automatic recovery. It requires host and running-container uptime above one hour, host CPU above 80%, and Nextcloud above 50% of total host CPU capacity in three samples before restarting only the app container. The first observed check recorded host CPU 3.8% and Nextcloud 0.0%, correctly exiting without restart. The saturation/restart path was not tested under load. This is symptom mitigation; the original root cause remains unresolved.

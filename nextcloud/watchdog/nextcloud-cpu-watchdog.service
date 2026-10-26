@@ -1,0 +1,10 @@
+[Unit]
+Description=Restart Nextcloud only after sustained high CPU usage
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nextcloud-cpu-watchdog
+TimeoutStartSec=180
+StandardOutput=journal
+StandardError=journal

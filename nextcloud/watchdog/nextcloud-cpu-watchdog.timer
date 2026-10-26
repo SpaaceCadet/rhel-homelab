@@ -1,0 +1,11 @@
+[Unit]
+Description=Check Nextcloud CPU usage every hour
+
+[Timer]
+OnBootSec=1h
+OnUnitActiveSec=1h
+AccuracySec=1min
+Unit=nextcloud-cpu-watchdog.service
+
+[Install]
+WantedBy=timers.target

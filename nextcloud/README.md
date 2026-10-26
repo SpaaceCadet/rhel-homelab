@@ -20,6 +20,8 @@ The observed reference deployment used RHEL 10.1 with Docker Compose, Nextcloud'
 - [Operations and recovery](operations.md) — validation, updates, consistent backup and restoration.
 - [Collabora integration](collabora.md) — observed Nginx routes, sample reverse-proxy patterns and backend verification gaps.
 
+- [Hourly CPU watchdog](cpu-watchdog.md) — conditional recovery for rare CPU saturation, full script and systemd units, thresholds, evidence and limitations.
+
 ## Deploying on a separate test host
 
 1. Prepare Docker, Docker Compose and suitable persistent storage. Set SELinux mount labels appropriately; the example uses dedicated local paths with `:Z`.

@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+
+import datetime
+import json
+import os
+import subprocess
+import time
+
+CONTAINER = "nextcloud-app"
+MIN_UPTIME = 3600
+HOST_CPU_THRESHOLD = 80.0
+NEXTCLOUD_CAPACITY_THRESHOLD = 50.0
+SAMPLES = 3
+INTERVAL = 10
+
+
+def log(message):
+    print(message, flush=True)
+
+
+def docker(*args):
+    result = subprocess.run(
+        ["docker", *args],
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    return result.stdout.strip()
+
+
+def cpu_counters():
+    with open("/proc/stat") as handle:
+        values = [int(value) for value in handle.readline().split()[1:]]
+    # Guest time is already included in user/nice time.
+    total = sum(values[:8])
+    idle = values[3] + values[4]
+    return total, idle
+
+
+def container_old_enough():
+    info = json.loads(docker("inspect", CONTAINER))[0]
+    state = info["State"]
+
+    if not state["Running"]:
+        log("Skipped: Nextcloud is not running.")
+        return False
+
+    started = datetime.datetime.fromisoformat(
+        state["StartedAt"].replace("Z", "+00:00")
+    )
+    age = (
+        datetime.datetime.now(datetime.timezone.utc) - started
+    ).total_seconds()
+
+    if age <= MIN_UPTIME:
+        log("Skipped: Nextcloud uptime is one hour or less.")
+        return False
+
+    return True
+
+
+def main():
+    with open("/proc/uptime") as handle:
+        uptime = float(handle.read().split()[0])
+
+    if uptime <= MIN_UPTIME:
+        log("Skipped: server uptime is one hour or less.")
+        return
+
+    if not container_old_enough():
+        return
+
+    cores = os.cpu_count() or 1
+
+    for sample in range(1, SAMPLES + 1):
+        total_before, idle_before = cpu_counters()
+        time.sleep(INTERVAL)
+
+        raw_cpu = docker(
+            "stats", "--no-stream", "--format", "{{.CPUPerc}}", CONTAINER
+        )
+        container_cpu = float(raw_cpu.rstrip("%"))
+
+        total_after, idle_after = cpu_counters()
+        delta = total_after - total_before
+        if delta <= 0:
+            raise RuntimeError("Invalid host CPU sample; no restart performed.")
+
+        host_cpu = 100.0 * (
+            1.0 - (idle_after - idle_before) / delta
+        )
+        capacity_cpu = container_cpu / cores
+
+        log(
+            f"Sample {sample}/{SAMPLES}: host={host_cpu:.1f}%, "
+            f"Nextcloud={container_cpu:.1f}% Docker CPU "
+            f"({capacity_cpu:.1f}% of server capacity)"
+        )
+
+        if (
+            host_cpu <= HOST_CPU_THRESHOLD
+            or capacity_cpu <= NEXTCLOUD_CAPACITY_THRESHOLD
+        ):
+            log("No restart: CPU conditions are not both met.")
+            return
+
+    # Recheck in case the container restarted during sampling.
+    if not container_old_enough():
+        return
+
+    log("Sustained high CPU detected. Restarting Nextcloud.")
+    docker("restart", "--timeout", "30", CONTAINER)
+
+    running = docker("inspect", "--format", "{{.State.Running}}", CONTAINER)
+    if running != "true":
+        raise RuntimeError("Nextcloud is not running after restart.")
+
+    log("Nextcloud restarted. Container is running; app readiness not checked.")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as exc:
+        log(f"ERROR: {exc}")
+        raise SystemExit(1)
