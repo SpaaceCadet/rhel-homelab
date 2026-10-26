@@ -31,3 +31,9 @@ flowchart TD
 The Linux MCP host policy in the historic single-operator lab used a permissive `all_users: true` match for a constrained host/tool set. That is **not authentication** and is intentionally **not provided as a production-ready configuration** here. The Obsidian MCP historically published an HTTP port to all host interfaces; the public example below narrows it to loopback, which is a proposed improvement, not an observation of the historical deployment.
 
 No tunnel IDs, API keys, SSH private keys, real IP addresses, usernames, hostnames, vault contents, or production mount paths are published.
+
+## October 26: persistent hostname and static Docker networking
+
+- [Docker DNS, SSH source-IP and network recovery incident](../incidents/linux-mcp-docker-dns-ssh-2026-10-26.md) — two Mermaid diagrams, full sanitized Compose, diagnosis, rollback guidance and validation.
+- The first failure was missing hostname resolution inside the MCP container. After migrating to Compose, the SSH account's source-IP allow rule no longer matched the container's new Docker bridge address. A persistent `extra_hosts` mapping and corrected bridge configuration restored diagnostic calls.
+- **Follow-up:** verify the actual fixed container IP and narrow the OpenSSH allow rule to that address; test recovery after reboot.
