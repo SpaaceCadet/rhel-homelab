@@ -9,6 +9,8 @@ Sanitized historical homelab investigations from Obsidian. Reports preserve the 
 | [Stremio Docker bridge playback outage (2026-10-25)](stremio-docker-bridge-playback-2026-10-25.md) | HLS 504, metadata absent, control torrent/bridge comparisons, route migration | Playback restored on new bridge; exact old bridge fault unproven |
 | [Obsidian MCP vault EACCES](../mcp/obsidian.md) | UID, directory permissions, failed write | Writing restored after permissions troubleshooting; precise remediation not independently recorded |
 
+| [Linux MCP Docker DNS and SSH source-IP (2026-10-26)](linux-mcp-docker-dns-ssh-2026-10-26.md) | `getaddrinfo` errors, MCP tunnel health, sshd `AllowUsers` source mismatch, invalid CIDR | Tool queries restored; fixed-IP hardening and reboot persistence still require final validation |
+
 ## Reporting template
 
 Use: **Impact → timeline → known evidence → hypotheses → fix/mitigation → validation → prevention → outstanding unknowns**. Redact attackers' IP addresses, real hostnames, internal networks, credentials and client data before publication.
