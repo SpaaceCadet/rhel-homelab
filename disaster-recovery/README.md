@@ -85,3 +85,7 @@ The curl ports are examples from the documented reference topology, **not guaran
 Maintain versioned encrypted **off-host** copies and periodically restore them to an isolated test system. A persistent Docker volume is not an off-host backup. Keep recovery credentials outside the public repo. Document last successful backup, last restore drill, expected recovery point and recovery time; these are currently **not verified by the cited notes**.
 
 See also: [monitoring recovery](../monitoring/backup-recovery.md), [Nextcloud operations](../nextcloud/operations.md), [Nginx TLS recovery](../nginx/README.md), [SELinux](../security/selinux.md).
+
+## Recorded data disk migration
+
+[31 October 2026 — larger data disk and Nextcloud recovery](data-disk-migration-2026-10-31.md): attribute-preserving copy, mount points, UUID-based fstab cutover, nested-directory correction, physical replacement, and unresolved USB/GPT checks. Operator-confirmed recovery is distinguished from unverified integrity checks.
