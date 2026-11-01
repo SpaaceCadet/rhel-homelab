@@ -14,6 +14,10 @@ flowchart LR
 
 The observed reference deployment used RHEL 10.1 with Docker Compose, Nextcloud's Apache-based image, MariaDB 10.6, host-level Nginx and client-certificate verification. The actual DB was **not** published to the host; Nextcloud reached it via Compose service name `db`.
 
+## Storage update — 1 November 2026
+
+The active MariaDB data directory was relocated from HDD to NVMe SSD; Nextcloud application and media remained on HDD. Runtime mount verification and application database access succeeded. No before/after throughput benchmark was captured. See [migration procedure, evidence and rollback](mariadb-ssd-migration.md). The general Compose example below retains its generic relative paths; it does not automatically place the database on SSD.
+
 ## Contents
 
 - [Sanitized Compose example](compose.yaml) — illustrates the observed Nextcloud/MariaDB layout but **does not contain original credentials or host filesystem paths**.
